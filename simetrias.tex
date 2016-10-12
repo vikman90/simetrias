@@ -1,0 +1,337 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage[hidelinks]{hyperref}
+\usepackage{fancyhdr}
+\usepackage{lettrine}
+\usepackage{fancyvrb}
+\usepackage{multicol}
+
+\author{Víctor Manuel Fernández Castro}
+\title{Simetrías en lengua \\ \Large Palíndromos y bifrontes}
+\date{12 de octubre de 2016}
+
+\setlength{\parskip}{6pt}
+\fancyhead[L]{Víctor M. Fdez-Castro}
+\renewcommand{\footrulewidth}{0.4pt}
+
+\begin{document}
+	\maketitle
+	\thispagestyle{empty}
+	
+	\newpage
+	\setcounter{page}{1}
+	\tableofcontents
+	
+	% Capítulo 1 ---------------------------------------------------------------
+	
+	\newpage
+	\pagestyle{fancy}
+	\section{Introducción}
+	
+	\lettrine{L}{a simetría} es un rasgo característico de formas, sistemas o entidades, relacionada con su \textbf{invarianza} bajo ciertas transformaciones \cite{simetria}. Dada su definición tan abierta puede comprender diversos significados y encontrarse ejemplos de simetrías en los más diversos campos de la cultura.
+	
+	Cuando hablamos de simetrías, la idea más común es tal vez la simetría en su \textbf{forma visual}, refiriéndonos a geometría (simetría especular): existe un plano que equidista de cualesquiera pareja de puntos homólogos del objeto. \cite{simetria_especular}
+	
+	Un aspecto interesante de la simetría especular es su aparición conceptualmente en las palabras y su uso en literatura para escribir frases que se leen de la misma forma en los dos sentidos.
+	
+	Algunos ingeniosos autores han conseguido construir complejas oraciones que forman palíndromos. Es también muy conocido el juego de hablar pronunciando las palabras al revés de como se escriben.
+	
+	En este trabajo vamos a analizar algunas de estas ocurrencias en la lengua española. Para ello, además de buscar en Internet, vamos a producir un \textbf{programa informático} dedicado a buscar palabras de este tipo en el diccionario.
+	
+	% Capítulo 2 ---------------------------------------------------------------
+	
+	\section{Palíndromos}
+	\subsection{Definición}
+	
+	Un palíndromo ---del griego \textit{palin dromein}, que significa ``volver atrás''--- es una palabra o una expresión que \textbf{se lee igual adelante que atrás}. Si se trata de un número se le conoce como capicúa. \cite{palindromo}
+	
+	Hay varias formas de definir matemáticamente la simetría en palabras, entendidas como cadenas de símbolos. Tal vez, la más sencilla sea la siguiente:
+	
+	Sea \textit{x} una cadena, y \textit{n} su longitud, entonces:
+	
+	\begin{equation}
+	Palindromo(x,n) \equiv \forall i / i \in [1..n] \Longrightarrow x_i = x_{n-i+1}
+	\end{equation}
+	
+	En otras palabras: una palabra es un palíndromo si su primer símbolo es igual que el último, el segundo que el penúltimo, etcétera. Hay un caso trivial de simetría: \textbf{cualquier palabra de longitud 1} es necesariamente palíndromo.
+	
+	También podemos definir una palabra simétrica por recursividad, ya que, si \textit{x} es un palíndromo, entonces la palabra que resulta de eliminar las letras primera y última es también un palíndromo:
+	
+	\begin{equation}
+	Palindromo(x,n) \equiv n = 1 \lor Palindromo(x_{2..n-1}, n - 2)
+	\end{equation}
+	
+	\subsection{Programa}
+	
+	Vamos a escribir un sencillo programa en lenguaje Python para trabajar sobre un archivo que contiene todo el vocabulario español. \cite{teoruiz}
+	
+	Para obtener resultados más interesantes, vamos a ignorar los palíndromos triviales (palabras de una sola letra) y también los signos de acentuación.
+	
+	Nuestra función recibe el nombre del archivo que contiene cada palabra en una línea, y analiza cada una de ellas, eliminando en primer lugar el último signo ---que corresponde a la marca de fin de línea--- y \textbf{sustituyendo las letras acentuadas} por sus equivalentes no acentuadas.
+	
+	Cada palabra que cumpla la condición de palindromía se añade a una lista, que se devuelve al final de la función. El resultado es el siguiente:
+	
+	\begin{Verbatim}
+table = str.maketrans('áéíóú', 'aeiou')
+
+def findpalindromes(path):
+    file = codecs.open(path, 'r', 'utf-8')
+    palindromes = []
+
+    for line in file:
+        word = line[:-1].translate(table)
+
+        if len(word) > 1 and word == word[::-1]:
+            palindromes.append(word)
+
+    return palindromes
+	\end{Verbatim}
+	
+	\subsection{Resultados}
+	
+	\noindent
+	La aplicación anterior encontró 72 palabras en el lemario introducido:
+	
+	\begin{multicols}{4}
+	\begin{enumerate}
+		\item aba
+		\item ababa
+		\item aca
+		\item acá
+		\item afufa
+		\item aga
+		\item aja
+		\item ajá
+		\item ajajá
+		\item ala
+		\item alá
+		\item alalá
+		\item allá
+		\item álula
+		\item ama
+		\item ana
+		\item aña
+		\item ananá
+		\item anilina
+		\item anona
+		\item apa
+		\item apá
+		\item apócopa
+		\item ara
+		\item arra
+		\item asa
+		\item DVD
+		\item efe
+		\item eje
+		\item ele
+		\item elle
+		\item eme
+		\item ene
+		\item eñe
+		\item ere
+		\item erre
+		\item ese
+		\item gag
+		\item kayak
+		\item ll
+		\item mam
+		\item nen
+		\item nin
+		\item nomon
+		\item non
+		\item obo
+		\item oídio
+		\item ojo
+		\item orero
+		\item oro
+		\item oso
+		\item ososo
+		\item oto
+		\item ovo
+		\item pop
+		\item radar
+		\item rajar
+		\item rallar
+		\item rapar
+		\item rasar
+		\item rayar
+		\item razar
+		\item recocer
+		\item reconocer
+		\item rever
+		\item rodador
+		\item rotor
+		\item ses
+		\item sus
+		\item TNT
+		\item ujú
+		\item yatay
+	\end{enumerate}
+	\end{multicols}
+
+	Aunque no aparecían en el archivo fuente, encontramos también las siguientes palabras palíndromas:
+	
+	\begin{multicols}{4}
+	\begin{itemize}
+		\item aibofobia
+		\item arenera
+		\item arepera
+		\item aviva
+		\item salas
+		\item seres
+		\item somos
+		\item sometemos
+	\end{itemize}
+	\end{multicols}
+	
+	% Capítulo 3 ---------------------------------------------------------------
+	
+	\section{Bifrontes}
+	
+	\subsection{Definición}
+	
+	De una forma parecida a los palíndromos, los bifrontes son palabras o frases que tienen distinto significado si se leen a izquierda o a derecha. \cite{bifronte} 
+
+	También podemos entender estos artificios como pares de \textbf{expresiones simétricas} o espejadas, en tanto que podríamos verlas como si hubiera un espejo entre ellas.
+	
+	Podemos construir bifrontes para cualquier palabra, pero solo en algunos casos tendrán sentido. 
+	
+	\subsection{Programa}
+	
+	Hemos diseñado un \textbf{algoritmo de búsqueda} para buscar todos los bifrontes del vocabulario.
+	
+    Recorreremos la lista de palabras y, para cada una, recorreremos nuevamente el diccionario (a partir de esa posición) para buscar semi-simetrías. La eficiencia de esta técnica es:
+    
+    \begin{equation}
+    \frac{N^2}{2}
+    \end{equation}
+    
+    \newpage
+    Teniendo en cuenta que la lista tiene aproximadamente 85\,900 palabras, tendríamos que hacer:
+    
+    \begin{equation}
+    \frac{85\,900^2}{2}=3\,689\,405\,000 \ operaciones
+    \end{equation}
+    
+    Para optimizar el rendimiento, clasificaremos en memoria las palabras según su \textbf{letra inicial}, así para cada palabra, buscaremos solo en el subconjunto de palabras que empiecen por la letra final de la palabra en cuestión. Esto nos permite obtener una eficiencia mejor:
+    
+    \begin{equation}
+    \frac{N^2}{2} \cdot \frac{1}{27} = \frac{85\,900^2}{54} \approx 136\,644\,630 \ operaciones
+    \end{equation}
+    
+    A pesar de que siguen siendo muchas operaciones, hemos bajado el tiempo de proceso de 45 minutos a 96 segundos aproximadamente, un tiempo mucho más razonable. El programa resultante es el siguiente:
+    
+    \begin{Verbatim}
+table = str.maketrans('áéíóú', 'aeiou')
+    
+def findreverse(path):
+    file = codecs.open(path, 'r', 'utf-8')
+    words = []
+    wordst = []
+    indices = {}
+    reverses = []
+    i = 0
+   
+    for line in file:
+        word = line[:-1]
+    
+        if len(word) > 1 and not (word[0] == '-' or word[-1] == '-'):
+            wordt = word.translate(table)
+            words.append(word)
+            wordst.append(wordt)
+   
+            if wordt[0] not in indices:
+                indices[wordt[0]] = [i, i + 1]
+            else:
+                indices[wordt[0]][1] = i + 1
+    
+            i += 1
+    
+    for i in range(len(words)):
+        for j in range(*indices[wordst[i][0]]):
+            if j > i and wordst[i] == wordst[j][::-1]:
+                reverses.append((words[i], words[j]))
+    
+    return reverses
+    \end{Verbatim}
+    
+    \subsection{Resultados}
+    
+    El programa ha encontrado 17 bifrontes:
+    
+    \begin{multicols}{2}
+    	\begin{enumerate}
+    		\item abetuna - anúteba
+    		\item aca - acá
+    		\item acera - areca
+    		\item adala - alada
+    		\item adaza - azada
+    		\item adra - arda
+    		\item adula - aluda
+    		\item aja - ajá
+    		\item ala - alá
+    		\item alúa - aula
+    		\item amina - ánima
+    		\item ansa - asna
+    		\item apa - apá
+    		\item odio - oído
+    		\item onagro - órgano
+    		\item orto - otro
+    		\item raedor - rodear
+    	\end{enumerate}
+    \end{multicols}
+
+	Mención aparte la palabra inventada \textit{supercalifragilisticoespialidoso}, que aparece en el cine, en la película de \textit{Mary Poppins} y en la que la protagonista pronuncia al revés, produciendo un bifronte: \textit{osodilaipseocitsilicarfilacrepus}.
+	
+	% Capítulo 4 ---------------------------------------------------------------
+	
+	\section{Frases palíndromas}
+	
+	Del mismo modo que existen palabras que forman un palíndromo, también es posible construir oraciones completas de los más diversos temas que presentan simetría.
+	
+	Algunas, quizás demasiado enrevesadas, respetan la sintaxis del lenguaje aunque su semántica no tiene mucho sentido. A continuación enumeramos algunas de las frases más interesantes que hemos encontrado.
+	
+	\begin{itemize}
+		\item A la catalana banal, atácala.
+		\item Adivina ya te opina, ya ni miles origina, ya ni cetro me domina, ya ni monarcas, a repaso ni mulato carreta, acaso nicotina, ya ni cita vecino, anima cocina, pedazo gallina, cedazo terso nos retoza de canilla goza, de pánico camina, ónice vaticina, ya ni tocino saca, a terracota luminosa pera, sacra nómina y ánimo de mortecina, ya ni giros elimina, ya ni poeta, ya ni vida. --- Ricardo Ochoa.
+		\item ¿Acaso hubo búhos acá? --- Juan Filloy.
+		\item Allí por la tropa portado, traído a ese paraje de maniobras, una tipa como capitán usar boina me dejara, pese a odiar toda tropa por tal ropilla. --- Luis Torrent
+		\item Allí si María avisa y así va a ir a mi silla.
+		\item Amo la pacífica paloma.
+		\item Amor a Roma.
+		\item Ana lava lana.
+		\item Anita lava la tina.
+		\item Añora la Roña.
+		\item Atar a la rata.
+		\item Átale, demoníaco Caín, o me delata. --- usado por Julio Cortázar.
+		\item Ateo por Arabia iba raro poeta. --- Juan Filloy.
+		\item Dábale arroz a la zorra el abad.
+		\item Eva ya hay ave.
+		\item Isaac no ronca así.
+		\item La ruta natural.
+		\item La ruta nos aportó otro paso natural.
+		\item Las Nemocón no comen sal.
+		\item Nada, yo soy Adán. --- Guillermo Cabrera Infante.
+		\item No Mara, sometamos o matemos a Ramón.
+		\item No di mi decoro, cedí mi don. --- Juan Filloy.
+		\item No lata, no: la totalidad arada dilato talón a talón.
+		\item Oirás orar a Rosario.
+		\item Se van sus naves.
+		\item ¿Son mulas o cívicos alumnos?	
+	\end{itemize}
+
+	\section{Conclusión}
+	
+	Como explicó el Profesor D. Miguel Ortega Titos, y además fuimos descubriendo a lo largo del curso, el concepto de simetría es tan amplio que no se puede dar una definición exacta. Además encontramos ejemplos de esta característica en muchos aspectos cotidianos.
+	
+	Aunque la simetría en lengua es más conceptual que geométrica, pues reflejar exactamente una palabra solo en pocos casos sería legible ---y estaría a merced de la tipografía empleada---, esperamos haber aportado un nuevo punto de vista en algo que, sin duda, aún podríamos hablar y escribir más extensamente.
+	
+	% Bibliografía -------------------------------------------------------------
+	
+	\clearpage
+	\addcontentsline{toc}{section}{Bibliografía}
+	\bibliographystyle{acm}
+	\bibliography{simetrias}
+	
+\end{document}
